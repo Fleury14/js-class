@@ -1,0 +1,251 @@
+@import url("https://fonts.googleapis.com/css?family=Lato");
+.codebox {
+  background-color: #111;
+  color: #eee;
+  font-family: monospace;
+  padding: 10px;
+  margin: 20px;
+}
+
+.codebox p {
+  margin: 5px;
+}
+
+.codebox .ind1 {
+  text-indent: 20px;
+}
+
+.codebox .ind2 {
+  text-indent: 40px;
+}
+
+.codebox .ind3 {
+  text-indent: 60px;
+}
+
+.codebox .ind4 {
+  text-indent: 80px;
+}
+
+.lucky-box {
+  background-color: #600;
+  color: #eee;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  margin: 20px;
+}
+
+.lucky-box p {
+  margin-left: 50px;
+}
+
+.lucky-box .lucky-right-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-right.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-lookat-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-lookat.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-why-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-why.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-left-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-left.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-expect-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-expect.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-sleep-bg {
+  height: 150px;
+  width: 150px;
+  background: url("../img/lucky-sleep.JPG");
+  background-size: cover;
+  transform: rotate(90deg);
+}
+
+.lucky-box .lucky-lay-down-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-lay-down.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-lookaway-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-look-away.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-up-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-up.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-hi-bg {
+  height: 100px;
+  width: 100px;
+  background: url("../img/lucky-hi.jpg");
+  background-size: cover;
+}
+
+.lucky-box .lucky-what-bg {
+  height: 120px;
+  width: 120px;
+  background: url("../img/lucky-what.jpg");
+  background-size: cover;
+}
+
+.example {
+  background-color: #336600;
+  font-family: monospace;
+  color: #eee;
+  padding: 10px;
+}
+
+.result {
+  background-color: #006666;
+  color: #eee;
+  padding: 10px;
+}
+
+.result p {
+  margin: 3px;
+}
+
+.font-10 {
+  font-size: 10px;
+}
+
+a {
+  color: #009999;
+  text-decoration: none;
+  transition: 0.3s all;
+}
+
+a:hover {
+  color: #00cccc;
+}
+
+footer {
+  display: flex;
+  justify-content: space-between;
+}
+
+body {
+  background: linear-gradient(#eee, #ddd);
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  padding: 0px 30px;
+}
+
+header {
+  color: #600;
+  text-align: center;
+}
+
+h3 {
+  color: #009999;
+  font-weight: 300;
+}
+
+h4 {
+  color: #336600;
+}
+
+.highlight {
+  color: yellow;
+}
+
+.highlight-red {
+  color: #e00;
+}
+
+body {
+  background: linear-gradient(#eee, #ddd);
+  font-family: 'Lato', sans-serif;
+  min-height: 100vh;
+  padding: 0px 30px;
+}
+
+header {
+  color: #600;
+  text-align: center;
+}
+
+h3 {
+  color: #009999;
+  font-weight: 300;
+}
+
+main {
+  display: grid;
+  grid-template-columns: 5% 45% 45% 5%;
+  grid-template-rows: 100% 100% 100% 100%;
+  grid-column-gap: 20px;
+}
+
+main .sub-title {
+  grid-column: 2 / 4;
+  grid-row: 1 / 2;
+}
+
+main h4 {
+  text-align: center;
+}
+
+main aside {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  background-color: #ffcccc;
+  padding: 10px;
+}
+
+main section {
+  grid-column: 3 / 4;
+  grid-row: 2 / 3;
+  background-color: #ccffff;
+  padding: 10px;
+}
+
+main .summary {
+  grid-column: 2 / 4;
+  grid-row: 3 / 4;
+}
+
+@media only screen and (max-width: 768px) {
+  main aside {
+    grid-column: 2 / 4;
+    margin-bottom: 20px;
+  }
+  main section {
+    grid-column: 2 / 4;
+    grid-row: 3 / 4;
+  }
+  main .summary {
+    grid-row: 4 / 5;
+  }
+}
+/*# sourceMappingURL=02style.css.map */
