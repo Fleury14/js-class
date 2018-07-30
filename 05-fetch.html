@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>05 - Fetch</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Fetch: It's real data!</h1>
+    </header>
+    <p>Now that we've gone over <a href="04-promises.html">promises</a>, we're ready for one of the more exciting aspects of JavaScript. Getting data from an API.</p>
+    <h3>AP..what?</h3>
+    <p>By strict definition, API stands for Application Programming Interface.</p>
+    <p>But that's not much help. The best way to think of an API is as a gateway for an end user to recieve data. That data often comes from a database, but can also be created inside the server that hosts the API.</p>
+    <p>That brings us to a difference in terminology: an API and a server are not the same thing. Instead, an API is part of a server, and its the part that recieves requests and sends data as a response.</p>
+    <p>When we talk to an API, we send it a <b>request</b>. Your address will hit an <b>endpoint</b> on an API, and based on that endpoint, and what you sent as part of your request, it will send a <b>response.</b></p>
+    <p>So how do we make a request to an API?</p>
+    <h3>Its Time to Fetch</h3>
+    <div class="lucky-box">
+        <div class="lucky-up-bg"></div>
+        <p>Fetch? I love fetch!</p>
+    </div>
+    <p>Not that fetch.</p>
+    <p>Prior to the existence of the fetch method, getting data from an API required use of an XMLHttpRequest, or XHR for short. And, to be quite frank, it was a little difficult to understand at first, and is somewhat unwieldy. So much so that it regularly made users import jQuery simply for its simplified version of it. If you have spare time after this lesson, acquainting yourself with the old XHR way of making an API request wouldn't be a bad idea because you will still see it in the wild.</p>
+    <p>But rejoice, for there is a simpler way. We can call fetch, quite easily, like so.</p>
+    <div class="codebox">
+        <p>fetch('http://www.apiaddress.com');</p>
+    </div>
+    <p>Okay, so maybe its not <b>that</b> simple. But we do start by using the fetch command and inputting the address of our API location.</p>
+    <p>But the result of that command does not return a string, or an object. Instead <b>fetch returns a promise</b>, which is why we went into the whole business about promises last lesson. Do you remember how we get data from something that returns a promise? It's <i>.then()</i>!</p>
+    <p>Note that we did not have to handle the resolve and reject condition inside our promise, fetch does all that for us. All we need to deal with is the handling of the data.</p>
+    <p>For this example we will be hitting a fan made Star Trek API to get a list of all the series:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1 highlight">.then( response => {</p>
+        <p class="ind2 highlight">console.log(response);</p>
+        <p class="ind1 highlight">});</p>
+    </div>
+    <p>We chained our .then onto the fetch request, passed in the response via the phat arrow function and console logged it. But before we get into the result of this, remember that for every <i>.then()</i> we should have a <i>.catch()</i> to handle our errors:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind1">})</p>
+        <p class="ind1 highlight">.catch( error => {</p>
+        <p class="ind2 highlight">console.log( 'Oh no! ', error);</p>
+        <p class="ind1 highlight">});</p>
+    </div>
+    <p>Now, if all seems well, any errors will run the .catch and any success will run the .then. So lets take a look at the console response.</p>
+    <img src="img/05-console.jpg" alt="console logged response">
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>That's not the array we wanted...</p>
+    </div>
+    <p>No, it sure isn't. This is a <b>Response Object</b>. We can get our data out of this thing, but you'll want to examine the different properties for some usefule information about the API request we just sent. You'll notice the url was in there. We get some kind of property telling us if we were redirected. But there are two important properties we want to look at: The status code, and <b>ok</b>.</p>
+    <h4>Status Code</h4>
+    <p>Every completed HTTP request is given a three digit status code as part of the response. <b>200</b> is the status code for a successful request. You've probably seen some of the bad error codes in your browser: <b>404</b> (Not found), <b>500</b> (Server Error), <b>401</b> (Unauthorized). This leads into an important difference between the new fetch inside JavaScript and previous methods like jQuery:</p>
+    <p><strong>Your promise will not be rejected if you get a response with a bad status code.</strong> This means that a 404 will not trigger any code inside of our catch().</p>
+    <p>So if we wanted to ensure that our catch is being used, we can write an if statement to read our status code, but that's not all!</p>
+    <h4>The first .then will handle the response object. A second .then will handle the actual data</h4>
+    <p>If you remember from our previous lesson, <b>in order to pass something from one .then to another, you must return the data in the first</b></p>
+    <p>That sounds like a lot to tackle. Lets start by getting our status code checking in order:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2 highlight">if (response.status) === 200 return response.json();</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.catch( error => {</p>
+        <p class="ind2">console.log( 'Oh no! ', error);</p>
+        <p class="ind1">});</p>
+    </div>
+    <p>Even more new things here, so lets go over them. Since the Response Object is an object, we are calling its property <i>status</i> using dot notation. We could have called it with <i>response['status'] if we had really wanted to. That checks the status code.</i></p>
+    <p>The second part is the <i>.json()</i> method. This method is built into javascript and transforms a Response Object into the actual data that you recieved. Since we're returning it, we should be able to actually see our data when we write the second .then:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2">if (response.status) === 200 return response.json();</p>
+        <p class="ind1">})</p>
+        <p class="ind1 highlight">.then( jsonResponse => {</p>
+        <p class="ind2 highlight">console.log(jsonResponse);</p>
+        <p class="ind1 highlight">})</p>
+        <p class="ind1">.catch( error => {</p>
+        <p class="ind2">console.log( 'Oh no! ', error);</p>
+        <p class="ind1">});</p>
+    </div>
+    <p>Check out your console log.</p>
+    <img src="img/05-console-2.jpg" alt="console logged json">
+    <p> This looks more like our data, but you'll notice this particular API did some formatting here too. The <i>page</i> property gives us some information on the data we pulled, and it looks like the <i>series</i> property holds the actual data we want. This is a good example because different API's will have different ways of formatting their data. We can now adjust ours by simply console logging the series property like so:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2">if (response.status) === 200 return response.json();</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.then( jsonResponse => {</p>
+        <p class="ind2 highlight">console.log(jsonResponse.series);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.catch( error => {</p>
+        <p class="ind2">console.log( 'Oh no! ', error);</p>
+        <p class="ind1">});</p>
+    </div>         
+    <p>Now peep the console log. It's our data! We just pulled data from the intarwebs and put it in our little JS file. Awesome! But we still have some work to do.</p>
+    <p>In the event we get something back as a bad status code, we still want our .catch to run. This will employ use of a new keyword you haven't seen: <b>throw</b></p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2">if (response.status) === 200 return response.json()</p>
+        <p class="ind2 highlight">else throw new Error(response.status);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.then( jsonResponse => {</p>
+        <p class="ind2">console.log(jsonResponse.series);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.catch( error => {</p>
+        <p class="ind2">console.log( 'Oh no! ', error);</p>
+        <p class="ind1">});</p>
+    </div>
+    <p>Perfect, now if this API was to give us a 404, our .catch code will run. The <b>throw</b> keyword creates a new error and that is what acts as our trigger for the .catch.</p>
+    <div class="lucky-box">
+        <div class="lucky-lookaway-bg"></div>
+        <p>What if I don't like status codes. That 'ok' thing seemed pretty nice...</p>
+    </div>
+    <p>You remembered. Yes, in addition to the raw status codes, the Response Object gave us a property of ok. <b>This will be set to false in the event of a bad status code like 500.</b> Therefore we can change our if statement to the following:</p>
+    <div class="codebox">
+        <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2 highlight">if (response.ok) return response.json()</p>
+        <p class="ind2">else throw new Error(response.status);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.then( jsonResponse => {</p>
+        <p class="ind2">console.log(jsonResponse.series);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.catch( error => {</p>
+        <p class="ind2">console.log( 'Oh no! ', error);</p>
+        <p class="ind1">});</p>
+    </div>
+    <p>Now we are checking to see if the <i>ok</i> property of our response object resolves to true, which gives us the same result. Nice.</p>
+    <h4>Right now, we are sending a GET request. There is no data that we are sending to the API other than the request. In Part 2, we will go over how to use fetch to do a POST request.</h4>
+    <p>I've also included the request we just built inside this page. You can check it out using the sources tab in your inspector. Notice how even though there is a console log after the fetch request that it appears in your console <b>before</b> the request. Its Asyncronouslicious!</p>
+    <a href="index.html" class="go-back-home-js">Back to Menu</a>
+    <script src="js/05script.js"></script>
+</body>
+</html>

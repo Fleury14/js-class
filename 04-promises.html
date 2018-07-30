@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>04 - Promises</title>
     <link rel="stylesheet" href="css/04style.css">
 </head>
 <body>
@@ -136,7 +136,7 @@
         <li>JavaScript will <b>not</b> wait for the first .then to finish before executing the second one. This can and will lead to complications when trying to pass a value from the first <i>.then()</i> to the second, so be careful.</li>
         <li>What you can do, however is call a second promise inside the .then of the first. Now the second .then will contain the resolved value of the second promise.</li>
     </ul>
-    <p>This may sound confusing, but the best example I can give is practice, practice, practice. Write some of your own promises and examin the behavior when you throw promises inside each other.</p>
+    <p>This may sound confusing, but the best example I can give is practice, practice, practice. Write some of your own promises and examin the behavior when you throw promises inside each other. Fortunately, we will see an example of chaining .then() in the next lesson.</p>
     <h3>A Final Word...</h3>
     <p>Lastly, it is worth mentioning that a new promise we construct isn't technically returning a string, or a number, or whatever you put inside your resolve. <b>It is actually returning a promise, and because it is a promise is why we  can use .then()</b>.</p>
     <p>You can force even a regular function to return a result that can be <i>.then()</i>'d by returning <i>Promise.resolve(value)</i> from your function. In fact, there are methods inside JavaScript that return promises <b>by default</b>. I wonder what one of them can be.......</p>
