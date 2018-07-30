@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>Promises: And theeeennnn......</h1>
+    </header>
+    <p>Up until know we have been writing our code mostly synchronously, that is to say that we start from the top and read down. As we introduced functions, we modified our program flow to jump from function to function.</p>
+    <p>This is all good, but up until now we have been operating under one principle: That the next line of code will not be run until the current line of code is finished with whatever it is doing.</p>
+    <p>This is not the case with most JavaScript code, especially as we move into getting data from APIs. You will find that the code runs asynchronously. It can be confusing at first but promises make our lives a little easier and prepare us more moving into observables.</p>
+    <h3>But First.... A Word About Callbacks</h3>
+    <p>Right now we are familiar with callbacks -- a block of executable code that we pass as an argument that will be executed, or called back, at some point.</p>
+    <p>Where you can find yourself in trouble is if you decided to nest callbacks. For example, lets start with one method we've used in class that incorporates a callback: <b>addEventListener</b>. Lets say we have an element inside a variable and we want to do something when someone clicks on it. That looks like so:</p>
+    <div class="codebox">
+        <p>myDiv.addEventListener('cilck', (e) => { doThings(); };</p>
+    </div>
+    <p>Seems harmless enough, right? Now lets say when someone triggers we want to add another eventListener that will do different stuff...</p>
+    <div class="codebox">
+        <p>myDiv.addEventListener('click', (e) {</p>
+        <p class="ind1">doStuff();</p>
+        <p class="ind1 highlight">myOtherDiv.addEventListener( (e) => {</p>
+        <p class="ind2 highlight">doMoreStuff();</p>
+        <p class="ind1 highlight">};</p>
+        <p>};</p>
+    </div>
+    <p>Not exactly pleasant, but not too bad. But what if now when someone triggers the second listener that we want to add a third?</p>
+    <div class="codebox">
+        <p>myDiv.addEventListener('click', (e) {</p>
+        <p class="ind1">doStuff();</p>
+        <p class="ind1">myOtherDiv.addEventListener( (e) => {</p>
+        <p class="ind2">doMoreStuff();</p>
+        <p class="ind2 highlight">yetAnotherDiv.addEventListener( (e) => {</p>
+        <p class="ind3 highlight">doTooMuchStuff();</p>
+        <p class="ind2 highlight">};</p>
+        <p class="ind1">};</p>
+        <p>};</p>
+    </div>
+    <p>Yikes. And then if we add a fourth and a fifth nest to the chain? It gets ugly and you end up with something that is referred to as <b>callback hell</b>.</p>
+    <div class="lucky-box">
+        <div class="lucky-what-bg"></div>
+        <p>Wait, that's an actual term?</p>
+    </div>
+    <p>Look it up. You'll find good (and bad) examples of callback hell everywhere. Sometimes that chain of )'s and }'s is unavoidable. But a lot of times it's not. There are ways to deal with callback hell that do not have to deal with asynchronous code:</p>
+    <ul>
+        <li>Avoiding anonymous functions and referred to named fuctions that are task specific that you define before hand.</li>
+        <li>Designing your app to avoid nesting in the first place</li>
+        <li>Bringing in modules, sometimes from third party packages</li>
+    </ul>
+    <p>These are all good, but there's another way to help us out: Promises</p>
+    <h3>Creating Our Own Promises</h3>
+    <p>Let's start out by declaring a variable named <i>isOkay</i>. This variable will come into play later.</p>
+    <p>When you create a promise, you first want to make sure that you are storing it in a variable (so we can call it later), and that you are doing so with the <b>new</b> keyword.</p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise();</p>
+    </div>
+    <p>Inside the promise is going to take an anonymouse functions that will pass two parameters: a method that will pass the result if we declare everything okay (in other words, error free), and a method that will pass a result if we find an error. You will commonly see these written as <b>resolve</b> and <b>reject</b>. You can name them whatever you want, but in this instance, I suggest sticking to resolve and reject because not only are they descriptive, you will see it in the wild a lot.</p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise( (resolve, reject) => {});</p>
+    </div>
+    <p>Now from this, we can see that there are three states to a promise.</p>
+    <ul>
+        <li>Pending: The code inside the promise is awaiting execution.</li>
+        <li>Resolved: We executed the code inside our promise and at some point returned a value using <i>resolve('something');</i></li>
+        <li>Rejected: We executed the code but either an error happened, or at some point we returned a value using <i>reject();</i></li>
+    </ul>
+    <p>Reject is optional, although as you contiue on in your code journey, you will begin to discover the benefits of good error handling (or, and more likely, the detriments of NOT error handling), so it is good practice to have a use for reject if it is at all applicable.</p>
+    <p>Now going back to our function, lets keep it simple. We will look at the value of <i>isOkay</i>. If its true, we will resolve the promise, otherwise we will reject it.</p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise( (resolve, reject) => {</p>
+        <p class="ind1 highlight">if (isOkay) resolve('We cool')</p>
+        <p class="ind1 highlight">else reject('Bummer...');</p>
+        <p>});</p>
+    </div>
+    <p>So we are looking at our variable, if its true, we use resolve to return a happy message, and if it's false, we use reject to send a sad one. :(</p>
+    <h4>While reject is optional, your code at some point has to hit either resolve or reject. Failure to do so will throw an unresolved promise error.</h4>
+    <p>So we've constructed our promise, but now what? Just like functions, we still have to invoke our promise. This is generally called <b>consuming</b>, not because your browser is hungry, but because you only resolve once (YORO?).</p>
+    <p>Lets invoke it...</p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise( (resolve, reject) => {</p>
+        <p class="ind1">if (isOkay) resolve('We cool')</p>
+        <p class="ind1">else reject('Bummer...');</p>
+        <p>});</p>
+        <p class="highlight">mpPromise();</p>
+    </div>
+    <p>But nothing happened? Why? That's because <b>Getting the value of a resolved promise requires you to chain a .then method and inside declare an anonymous function where you can do stuff with the value.</b></p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise( (resolve, reject) => {</p>
+        <p class="ind1">if (isOkay) resolve('We cool')</p>
+        <p class="ind1">else reject('Bummer...');</p>
+        <p>});</p>
+        <p class="">mpPromise</p>
+        <p class="ind1 highlight">.then( value => {</p>
+        <p class="ind2 highlight">console.log(value);</p>
+        <p class="ind1">});</p>
+    </div>
+    <p>Now if you run it, you should see the console log. We took the resolved value and named it <i>value</i> and simply console logged it.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>Can I also get the rejected value inside a .then()?</p>
+    </div>
+    <p>Yes, but it's considered bad practice. Instead, if you want to utilize the rejected value, chain a method called <i>.catch()</i> after the <i>.then()</i> like so:</p>
+    <div class="codebox">
+        <p>const isOkay = true</p>
+        <p></p>
+        <p>let myPromise = new Promise( (resolve, reject) => {</p>
+        <p class="ind1">if (isOkay) resolve('We cool')</p>
+        <p class="ind1">else reject('Bummer...');</p>
+        <p>});</p>
+        <p class="">mpPromise</p>
+        <p class="ind1">.then( value => {</p>
+        <p class="ind2">console.log(value);</p>
+        <p class="ind1">})</p>
+        <p class="ind1 highlight">.catch( error => {</p>
+        <p class="ind2 highlight">console.log(error);</p>
+        <p class="ind1 highlight">});</p>
+    </div>
+    <p>You can also chain .thens() if you so desire, but you must remember two things when doing so:</p>
+    <ul>
+        <li>In order to retain the value in the second <i>.then()</i> you must <i>return</i> the value in the first</li>
+        <li>JavaScript will <b>not</b> wait for the first .then to finish before executing the second one. This can and will lead to complications when trying to pass a value from the first <i>.then()</i> to the second, so be careful.</li>
+        <li>What you can do, however is call a second promise inside the .then of the first. Now the second .then will contain the resolved value of the second promise.</li>
+    </ul>
+    <p>This may sound confusing, but the best example I can give is practice, practice, practice. Write some of your own promises and examin the behavior when you throw promises inside each other.</p>
+    <h3>A Final Word...</h3>
+    <p>Lastly, it is worth mentioning that a new promise we construct isn't technically returning a string, or a number, or whatever you put inside your resolve. <b>It is actually returning a promise, and because it is a promise is why we  can use .then()</b>.</p>
+    <p>You can force even a regular function to return a result that can be <i>.then()</i>'d by returning <i>Promise.resolve(value)</i> from your function. In fact, there are methods inside JavaScript that return promises <b>by default</b>. I wonder what one of them can be.......</p>
+    <h4>Find out next!</h4>
+    <a href="index.html" class="go-back-home-js">Back to Menu</a>
+</body>
+</html>
