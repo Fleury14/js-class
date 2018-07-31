@@ -55,7 +55,7 @@
         <div class="lucky-left-bg"></div>
         <p>That's not the array we wanted...</p>
     </div>
-    <p>No, it sure isn't. This is a <b>Response Object</b>. We can get our data out of this thing, but you'll want to examine the different properties for some usefule information about the API request we just sent. You'll notice the url was in there. We get some kind of property telling us if we were redirected. But there are two important properties we want to look at: The status code, and <b>ok</b>.</p>
+    <p>No, it sure isn't. This is a <b>Response Object</b>. We can get our data out of this thing, but you'll want to examine the different properties for some useful information about the API request we just sent. You'll notice the url was in there. We get some kind of property telling us if we were redirected. But there are two important properties we want to look at: The status code, and <b>ok</b>.</p>
     <h4>Status Code</h4>
     <p>Every completed HTTP request is given a three digit status code as part of the response. <b>200</b> is the status code for a successful request. You've probably seen some of the bad error codes in your browser: <b>404</b> (Not found), <b>500</b> (Server Error), <b>401</b> (Unauthorized). This leads into an important difference between the new fetch inside JavaScript and previous methods like jQuery:</p>
     <p><strong>Your promise will not be rejected if you get a response with a bad status code.</strong> This means that a 404 will not trigger any code inside of our catch().</p>
@@ -67,13 +67,13 @@
         <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
         <p class="ind1">.then( response => {</p>
         <p class="ind2">console.log(response);</p>
-        <p class="ind2 highlight">if (response.status) === 200 return response.json();</p>
+        <p class="ind2 highlight">if (response.status === 200) return response.json();</p>
         <p class="ind1">})</p>
         <p class="ind1">.catch( error => {</p>
         <p class="ind2">console.log( 'Oh no! ', error);</p>
         <p class="ind1">});</p>
     </div>
-    <p>Even more new things here, so lets go over them. Since the Response Object is an object, we are calling its property <i>status</i> using dot notation. We could have called it with <i>response['status'] if we had really wanted to. That checks the status code.</i></p>
+    <p>Even more new things here, so lets go over them. Since the Response Object is an object, we are calling its property <i>status</i> using dot notation. We could have called it with <i>response['status']</i> if we had really wanted to. That checks the status code.</p>
     <p>The second part is the <i>.json()</i> method. This method is built into javascript and transforms a Response Object into the actual data that you recieved. Since we're returning it, we should be able to actually see our data when we write the second .then:</p>
     <div class="codebox">
         <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
@@ -120,12 +120,12 @@
         <p class="ind2">console.log( 'Oh no! ', error);</p>
         <p class="ind1">});</p>
     </div>
-    <p>Perfect, now if this API was to give us a 404, our .catch code will run. The <b>throw</b> keyword creates a new error and that is what acts as our trigger for the .catch.</p>
+    <p>Now if the API was to give us a code other than a 200 our .catch code will run. The <b>throw</b> keyword creates a new error and that is what acts as our trigger for the .catch.</p>
     <div class="lucky-box">
         <div class="lucky-lookaway-bg"></div>
         <p>What if I don't like status codes. That 'ok' thing seemed pretty nice...</p>
     </div>
-    <p>You remembered. Yes, in addition to the raw status codes, the Response Object gave us a property of ok. <b>This will be set to false in the event of a bad status code like 500.</b> Therefore we can change our if statement to the following:</p>
+    <p>You remembered. Yes, in addition to the raw status codes, the Response Object gave us a property of ok. <b>This will be set to false in the event of a bad status code like 500.</b> This can be useful because there are status codes that may not be bad, but aren't 200. Therefore we can avoid having to go through every status code possibility by changing our if statement to the following:</p>
     <div class="codebox">
         <p>fetch('http://stapi.co/api/v1/rest/series/search')</p>
         <p class="ind1">.then( response => {</p>
