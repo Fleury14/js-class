@@ -61,7 +61,7 @@
         <p></p>
         <p>let myPromise = new Promise();</p>
     </div>
-    <p>Inside the promise is going to take an anonymouse functions that will pass two parameters: a method that will pass the result if we declare everything okay (in other words, error free), and a method that will pass a result if we find an error. You will commonly see these written as <b>resolve</b> and <b>reject</b>. You can name them whatever you want, but in this instance, I suggest sticking to resolve and reject because not only are they descriptive, you will see it in the wild a lot.</p>
+    <p>Inside the promise is going to take an anonymous functions that will pass two parameters: a method that will pass the result if we declare everything okay (in other words, error free), and a method that will pass a result if we find an error. You will commonly see these written as <b>resolve</b> and <b>reject</b>. You can name them whatever you want, but in this instance, I suggest sticking to resolve and reject because not only are they descriptive, you will see it in the wild a lot.</p>
     <div class="codebox">
         <p>const isOkay = true</p>
         <p></p>
@@ -136,7 +136,7 @@
         <li>JavaScript will <b>not</b> wait for the first .then to finish before executing the second one. This can and will lead to complications when trying to pass a value from the first <i>.then()</i> to the second, so be careful.</li>
         <li>What you can do, however is call a second promise inside the .then of the first. Now the second .then will contain the resolved value of the second promise.</li>
     </ul>
-    <p>This may sound confusing, but the best example I can give is practice, practice, practice. Write some of your own promises and examin the behavior when you throw promises inside each other. Fortunately, we will see an example of chaining .then() in the next lesson.</p>
+    <p>This may sound confusing, but the best example I can give is practice, practice, practice. Write some of your own promises and examine the behavior when you throw promises inside each other. Fortunately, we will see an example of chaining .then() in the next lesson.</p>
     <h3>A Final Word...</h3>
     <p>Lastly, it is worth mentioning that a new promise we construct isn't technically returning a string, or a number, or whatever you put inside your resolve. <b>It is actually returning a promise, and because it is a promise is why we  can use .then()</b>.</p>
     <p>You can force even a regular function to return a result that can be <i>.then()</i>'d by returning <i>Promise.resolve(value)</i> from your function. In fact, there are methods inside JavaScript that return promises <b>by default</b>. I wonder what one of them can be.......</p>
