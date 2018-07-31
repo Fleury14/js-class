@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>06 - POST</title>
+    <link rel="stylesheet" href="css/04style.css">
+</head>
+<body>
+    <header>
+        <h1>POST: Time to send some data</h1>
+    </header>
+    <p>Ealier in class we went over the difference between a GET request and a POST request; A GET request recieves data but doesn't send anything to server other than the base request. A POST request is where we actually send data to the server as part of our request, we hit the API, the data is processed by the server, and a response is sent back.</p>
+    <h3>Building Our Fetch</h3>
+    <p>Unfortunately, there are not a lot of APIs that allow you to send POST requests for free. This is because, unlike a get request which only sends data back to the user, a POST request will recieve and process data sent by the user. This means that someone could maliciously send bad data to a server. Therefore, I will only be able to demonstrate what a POST request will look like.</p>
+    <p>Another important aspect of POST request to know is that because a server is recieving data (commonly known as a <b>payload</b>), there are some security measures that are in place both on a server and in your browser that I will go over.</p>
+    <p>All of that said, let's take a look at an example of me making a POST request to a local server of mine:</p>
+    <div class="codebox">
+        <p>fetch(('http://localhost:3456/api/post'), { <span class="highlight-red">// Pass an options object into fetch</span> </p>
+        <p class="ind1">method: 'POST', <span class="highlight-red">// Type of request, defaults to 'GET'</span></p>
+        <p class="ind1">mode: 'cors', <span class="highlight-red">// Let fetch know this will be cross-origin</span></p>
+        <p class="ind1">headers: {</p>
+        <p class="ind2">'Content-Type': 'application/json; charset=UTF-8' <span class="highlight-red">// Set headers to let the API kow what kind of data we are sending</span></p>
+        <p class="ind1">},</p>
+        <p class="ind1">body: JSON.stringify({ <span class="highlight-red">// Define our payload</span></p>
+        <p class="ind2">email: "fleury14@lol.com",</p>
+        <p class="ind2">password: "12345"</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.then( response => {</p>
+        <p class="ind2">console.log(response);</p>
+        <p class="ind2">return response.json();</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.then( jsonResp => {</p>
+        <p class="ind2">console.log(jsonResp);</p>
+        <p class="ind1">})</p>
+        <p class="ind1">.catch( err => {</p>
+        <p class="ind2">console.log(err);</p>
+        <p class="ind1">});</p>
+    </div>
+    <h4>Thats... a lot of stuff.</h4>
+    <p>It sure is, lets go over it step by step.</p>
+    <p>The first thing to know is that after the address of the API, we are passing in an object that acts as a set of options for the fetch command. <b>This is a very common practice when dealing with third-party modules if you get into NodeJS.</b> Each one of those properties refers to information that we are defining about our POST request. Lets check out those properties.</p>
+    <h4>method:</h4>
+    <p>The type of request we are making. The default is GET which is why we didnt specify that with our request earlier (more on that later). Since this is a POST request, thats what we put here...</p>
+    <h4>mode:</h4>
+    <p>CORS stands for Cross-Origin Resrouce Sharing. It is a fancy way of saying that we are making a request whos destination is different than the where the request originated. This may sound weird at first, but if you think about how you write code in JavaScript and then link it on the page, you know that the Javascript you made came from your app. It's executing code on the page that has the same origin.</p>
+    <p>The reason why even browsers tend to freak out over execution of code that <b>doesn't seem to come from the app itself</b>, this can be the sign of a common security risk where a malicious user tries to inject their own code into your app. This can happen with both servers, and injection of code into a webpage. As a result, browsers like Chrome and Firefox institute some safe guards to deal with this.</p>
+    <h4>headers:</h4>
+    <p>In addition to letting our browser and server know that we're executing a cross-origin request, we also specify what type of data we are sending. There are a few common ones:</p>
+    <ul>
+        <li><b>application/json</b> - A string that can be parsed to a JSON object, which is what we will be doing. This is super common, but unlike some other ones, application/json triggers what is called a <b>preflight</b> check. I don't want to go over too much back end stuff, but just know that some types of data are handled more strictly than others.</li>
+        <li><b>multipart/formdata</b> - You might be able to figure this one out: Data that tends to come from a form. This data is sent strictly as a key/value pair</li>
+        <li><b>application/x-www-form-urlencoded</b> - Also a key/value pair type of data. This doesn't support non-alphanumeric data, so you will see thing like %20 all over the place.</li>
+        <li><b>text/plain</b> - exactly what it says it is.</li>
+    </ul>
+    <p>We set this value to the 'Content-Type' header below. You will learn more about headers when you start to work in building server-side code.</p>
+    <h4>body:</h4>
+    <p>Here is the proverbial meat and potatoes; this is the object that will be examined by the server. We wrap it in a <i>JSON.stringify()</i> to convert that object to a string because thats how the fetch command processes a payload: as a string. It will later get parsed back to an object behind the scenes.</p>
+    <p>While using <i>JSON.stringify()</i> is used with fetch, when you make POST requests with other techniques, you may not always be stringifying the object.</p>
+    <h4>SIDE NOTE</h4>
+    <p>I know I'm talking about a lot of things that fall a little beyond the scope of vanillaJS, and it's not as important that you know every header you can send with a POST request. It's more important that you understand the existence and general purpose of this stuff so you can refer back to it later.</p>
+    <div class="lucky-box">
+        <div class="lucky-right-bg"></div>
+        <p>This is good and all, but what does the end result look like?</p>
+    </div>
+    <p>Glad you asked!</p>
+    <h3>The End Result</h3>
+    <p>I whipped up a super basic API that simply spits back the body that was sent to it. Here is the result of the fetch method posted above:</p>
+    <img src="img/06-console.jpg" alt="post console log">
+    <p>We sent a request to an API <b>including a payload</b> and we see the result of an API processing that data. Super!</p>
+    <div class="lucky-box">
+        <div class="lucky-left-bg"></div>
+        <p>This is not the fetch I'm used to.</p>
+    </div>
+    <a href="index.html" class="go-back-home-js">Back to Menu</a>
+    <script src="js/06script.js"></script>
+</body>
+</html>
